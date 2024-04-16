@@ -1,0 +1,41 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Image Classification API Test</title>
+</head>
+<body>
+  <h3>Upload image for analysis</h3>
+  <i class="fas fa-camera fa-3x text-dark-pink"></i>
+  <input type="file" id="fileInput">
+  <button onclick="uploadImage()">Upload Image</button>
+  <div id="result"></div>
+
+  <script>
+    function uploadImage() {
+      var fileInput = document.getElementById('fileInput');
+      var file = fileInput.files[0];
+
+      var formData = new FormData();
+      formData.append('file', file);
+
+      fetch('http://localhost:8000/predict/', {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        var resultDiv = document.getElementById('result');
+        resultDiv.innerHTML = 'Prediction: ' + data.prediction;
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        var resultDiv = document.getElementById('result');
+        resultDiv.innerHTML = 'Error: ' + error.message;
+      });
+    }
+  </script>
+</body>
+</html> 
